@@ -6,7 +6,7 @@
 /*   By: ael-kass <ael-kass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:58:39 by ael-kass          #+#    #+#             */
-/*   Updated: 2021/11/25 15:26:34 by ael-kass         ###   ########.fr       */
+/*   Updated: 2021/11/25 22:19:19 by ael-kass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,21 @@
 typedef struct s_mutex
 {
 	pthread_mutex_t *fork;
-	pthread_mutex_t m_eat;
+	// pthread_mutex_t eat;
 }				t_mutex;
 
 typedef	struct	arguments_s
 {
-	int	num_philo;
-	int	t_die;
-	int	t_eat;
-	int	t_sleep;
-	int	num_t_philo;
-	int	eating;
-	int	philo_id;
+	int		num_philo;
+	int		t_die;
+	int		t_eat;
+	int		t_sleep;
+	int		num_t_philo;
+	int		eating;
+	int		philo_id;
+	size_t	time;
 	pthread_mutex_t *mutex;
+	pthread_mutex_t *m_eat;
 }				arguments_t;	
 
 void	ft_putstr(char *s);
