@@ -6,7 +6,7 @@
 /*   By: ael-kass <ael-kass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:58:39 by ael-kass          #+#    #+#             */
-/*   Updated: 2021/11/25 22:19:19 by ael-kass         ###   ########.fr       */
+/*   Updated: 2021/11/26 13:35:38 by ael-kass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef	struct	arguments_s
 	int		num_t_philo;
 	int		eating;
 	int		philo_id;
-	size_t	time;
+	long	time;
+	struct timeval	start_simulation;
 	pthread_mutex_t *mutex;
 	pthread_mutex_t *m_eat;
 }				arguments_t;	

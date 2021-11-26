@@ -6,16 +6,16 @@
 /*   By: ael-kass <ael-kass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:30:35 by ael-kass          #+#    #+#             */
-/*   Updated: 2021/11/25 23:06:00 by ael-kass         ###   ########.fr       */
+/*   Updated: 2021/11/26 13:54:58 by ael-kass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-size_t		get_time(struct timeval	tv)
+long		get_time(struct timeval	tv)
 {
 	struct timeval	tv1;
-	size_t			time;
+	long			time;
 	
 	gettimeofday(&tv1, NULL);
 	time = ((tv1.tv_sec * 1000) + (tv1.tv_usec / 1000)) 
@@ -26,13 +26,11 @@ size_t		get_time(struct timeval	tv)
 void	*routine(void *args)
 {
   	arguments_t		*args1;
-	struct timeval	tv;
 	//int				i;
 
 	args1 = (arguments_t *)args;
 	if (args1->philo_id % 2)
 		usleep(400);
-	gettimeofday(&tv, NULL);
 	while (1)
 	{
 		// time when start ///
@@ -41,19 +39,19 @@ void	*routine(void *args)
 		//printf("philo %d, time = %ld\n",args1->philo_id, tv.tv_usec);
 		// take the forks/////////
 		pthread_mutex_lock(&args1->mutex[args1->philo_id]);
-		printf("%zu %d has taken a fork\n", get_time(tv), args1->philo_id + 1);
+		printf("%ld %d has taken a fork\n", get_time(args1->start_simulation), args1->philo_id + 1);
 		pthread_mutex_lock(&args1->mutex[(args1->philo_id + 1) % args1->num_philo]);
-		printf("%zu %d has taken a fork\n", get_time(tv), args1->philo_id + 1);
+		printf("%ld %d has taken a fork\n", get_time(args1->start_simulation), args1->philo_id + 1);
 		//////////start eating and unlock ////////////
-		
 
-		
+
+
 		pthread_mutex_lock(&args1->m_eat[args1->philo_id]);
-		
 
-		
-		args1->time = get_time(tv);
-		printf("%zu %d is eating\n", get_time(tv), args1->philo_id + 1);
+
+
+		args1->time = get_time(args1->start_simulation);
+		printf("%zu %d is eating\n", get_time(args1->start_simulation), args1->philo_id + 1);
 		usleep(args1->t_eat * 1000);
 		pthread_mutex_unlock(&args1->mutex[args1->philo_id]);
 		pthread_mutex_unlock(&args1->mutex[(args1->philo_id + 1) % args1->num_philo]);
@@ -66,10 +64,10 @@ void	*routine(void *args)
 
 		
 		// start sleeping /////////
-		printf("%zu %d is sleeping\n", get_time(tv), args1->philo_id + 1);
+		printf("%zu %d is sleeping\n", get_time(args1->start_simulation), args1->philo_id + 1);
 		usleep(args1->t_sleep * 1000);
 		// start thinking ////////////
-		printf("%zu %d is thinking\n", get_time(tv), args1->philo_id + 1);
+		printf("%zu %d is thinking\n", get_time(args1->start_simulation), args1->philo_id + 1);
 		/// start when end /////
 		//printf("philo %d, last_time = %d\n",args1->philo_id + 1, (tv.tv_usec - time) / 1000);
 	}
@@ -79,11 +77,14 @@ void	creat_threads(arguments_t **args)
 {
 	pthread_t			*th;
 	int					i;
+	struct timeval		time;
 
 	th = (pthread_t *)malloc((*args)->num_philo * sizeof(pthread_t));
+	gettimeofday(&time, NULL);
 	i = -1;
 	while (++i < (*args)->num_philo)
 	{
+		(*args)[i].start_simulation = time;
 		if (pthread_create(th + i, NULL, &routine, &(*args)[i]))
 		{
 			printf("Error\n");
@@ -171,13 +172,14 @@ int	main(int argc, char *argv[])
 	while (1)
 	{
 		i = -1;
-		
+	
 		while (++i < args->num_philo)
 		{
-			//printf(" RETURN :%d\n",pthread_mutex_lock(&args[i].m_eat[i]));
+			pthread_mutex_lock(&args[i].m_eat[i]);
 			// printf("%zu\n", get_time(tv) - args[i].time);
-			if ((get_time(tv) - args[i].time) >= (size_t)args[i].t_die)
+			if ((get_time(args[i].start_simulation) - args[i].time) >= (long)args[i].t_die)
 			{
+				// d
 				printf("%zu %d died\n", get_time(tv), args[i].num_philo);
 				return (-1);
 			}
