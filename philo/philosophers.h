@@ -6,7 +6,7 @@
 /*   By: ael-kass <ael-kass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:58:39 by ael-kass          #+#    #+#             */
-/*   Updated: 2021/11/26 13:35:38 by ael-kass         ###   ########.fr       */
+/*   Updated: 2021/11/27 20:56:12 by ael-kass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
-
-typedef struct s_mutex
-{
-	pthread_mutex_t *fork;
-	// pthread_mutex_t eat;
-}				t_mutex;
 
 typedef	struct	arguments_s
 {
@@ -38,6 +32,7 @@ typedef	struct	arguments_s
 	struct timeval	start_simulation;
 	pthread_mutex_t *mutex;
 	pthread_mutex_t *m_eat;
+	pthread_mutex_t *display;
 }				arguments_t;	
 
 void	ft_putstr(char *s);
