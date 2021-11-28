@@ -6,7 +6,7 @@
 /*   By: ael-kass <ael-kass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:57:11 by ael-kass          #+#    #+#             */
-/*   Updated: 2021/11/19 16:53:05 by ael-kass         ###   ########.fr       */
+/*   Updated: 2021/11/28 16:50:11 by ael-kass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	ft_putstr(char *s)
 		i++;
 	}
 }
-
 void	print_error()
 {
     ft_putstr("Error\n");
@@ -38,4 +37,17 @@ int	ft_isdigit(int c)
 		return (1);
 	else
 		return (0);
+}
+
+void	print_death(arguments_t *args, long time, int i)
+{
+	pthread_mutex_lock(args[i].display);
+	printf("%ld %d died\n", time, args[i].philo_id);
+}
+
+void	print_actions(arguments_t *args, char *str)
+{
+		pthread_mutex_lock(args->display);
+		printf("%ld %d %s\n", get_time(args->start_simulation), args->philo_id + 1, str);
+		pthread_mutex_unlock(args->display);
 }
